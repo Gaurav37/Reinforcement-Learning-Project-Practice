@@ -36,3 +36,13 @@ The above code block is highest level block in whole code where it calls other m
         self.policy.optimizer.step()
 ```
 This part of code makes sure that the losses are backpropagated. Action_memory contains values of logarithmic action probabilities and G is normalized gain or result of stepwise action. In short, it is implementation of formula θ ← θ+αγ​t​G(​∇​lnπ(At|St,θ)) where we are backpropagating losses by taking into consideration the differentiation of logarithmic action probabilities.
+
+The policy gradient algorithm uses categorical distribution over softmax action probabilities of output from neural network used.
+```
+        probabilities=F.softmax(self.policy.forward(observation))
+        action_probabilities=T.distributions.Categorical(probabilities)
+        action=action_probabilities.sample()
+        log_probs=action_probabilities.log_prob(action)
+        self.action_memory.append(log_probs)
+        return action.item()
+```
