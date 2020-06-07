@@ -1,4 +1,4 @@
-# Policy Gradient
+# Policy Gradient on Cartpole-1
 
 
 ![](/PolicyGradientCartpole.png)
@@ -26,3 +26,13 @@
         agent.learn()
 ```
 
+The above code block is highest level block in whole code where it calls other methods to choose actions based on observation records and then just like most other RL algorithms appends the reward of that action in the episode. After each episode scores are appended into score list and learn method is called.
+
+```
+        for g, logprob in zip(G,self.action_memory):   #log probability=action_memory
+            loss+= -g*logprob
+            
+        loss.backward()
+        self.policy.optimizer.step()
+```
+This part of code makes sure that the losses are backpropagated. Action_memory contains values of logarithmic action probabilities and G is normalized gain or result of stepwise action. In short, it is implementation of formula θ ← θ+αγ​t​G(​∇​lnπ(At|St,θ)) where we are backpropagating losses by taking into consideration the differentiation of logarithmic action probabilities.
