@@ -1,7 +1,7 @@
 # Policy Gradient on Cartpole-1
 
 
-![](/PolicyGradientCartpole.png)
+![](/PolicyGradientCartpole1.png)
 
 
 ```
