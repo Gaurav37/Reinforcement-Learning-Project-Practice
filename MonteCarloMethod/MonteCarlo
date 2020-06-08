@@ -1,0 +1,48 @@
+Following code is for making E-greedy action selection with ties broken randomly.
+```
+    probE=np.random.random()
+    if eps<probE:
+        #print("PROBE",probE)
+        Qmax= np.max(Q_array)
+        #print("QMAX",Qmax)
+        Qmaxpos=np.where(Q_array==Qmax)
+        #print("POS", Qmaxpos[0])
+        #print("NEWPOS", Qmaxpos)
+        #pos=pos.reshape(1,len(Qmaxpos[0]))
+        action=np.random.choice(Qmaxpos[0])
+    else :
+        action=np.random.choice(len(Q_array))
+    return action
+```
+Sample_episode Method
+```
+    state = env.reset()
+    while True:
+#         print(current_state)
+        Qs = Q[state]
+        choosen_action = select_action_epsilon_greedy(Q_array = Qs, eps = eps)
+        next_state, reward, done, info = env.step(choosen_action)
+        transitions.append( (state, choosen_action, reward) )
+        state = next_state
+        if done==True:
+            break
+    return transitions
+
+```
+On policy every visit Monte Carlo implementation main code as per formula in Sutton Barto book. Inside the loop, we are first calling sample_episode method provided above which provides transitions in form S0,A0,R1. So, for each state encountered again we are incrementing the count and adjusting the Q value based on formula.
+```
+for i in pbar:    #for i in num_episodes
+        G = 0.0
+        trans=sample_episode(env, Q, eps=eps)
+        trans.reverse()
+        for count1 in trans:
+            G=G+count1[2]
+            C[count1[0]][count1[1]]+=1
+            Q[count1[0]][count1[1]]=Q[count1[0]][count1[1]]+((G-Q[count1[0]][count1[1]])/(C[count1[0]][count1[1]]))
+        returns[i]=G
+        G_queue.append(G)
+        pbar.set_description(f'Episodes G={sum(G_queue) / len(G_queue)}')
+        
+    return Q, returns
+```
+
