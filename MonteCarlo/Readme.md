@@ -1,6 +1,6 @@
 Picture shows the results we received from Monte Carlo implementation to solve frozen lake environment.
 
-![](/MonteCarloEnvFrozenLake)
+![](/MonteCarloEnvFrozenLake.png)
 
 Let us now begin exploring the main method of Monte Carlo which is as follows.
 ```
